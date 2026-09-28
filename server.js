@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const mysql = require('mysql2/promise');
@@ -21,8 +22,15 @@ app.use(session({
   cookie: { httpOnly: true, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000 },
 }));
 
-app.use(express.static('public', { extensions: ['html'] }));
-app.get('/', (req, res) => res.redirect('/login'));
+app.use(express.static('public'));
+
+const page = (nom) => (req, res) =>
+  res.sendFile(path.join(__dirname, 'public', nom + '.html'));
+
+app.get('/', (req, res) => res.redirect('/api/login'));
+app.get('/api/login', page('login'));
+app.get('/api/register', page('register'));
+app.get('/api/blog', page('blog'));
 
 const isValid = (email, password) =>
   typeof email === 'string' && /^\S+@\S+\.\S+$/.test(email) &&
