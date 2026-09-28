@@ -9,11 +9,11 @@
   <main class="wide">
     <div class="header_options">
       <div id="header"></div>
-      <a href="/api/login" class="btn small">Se déconnecter</a>
+      <button type="button" id="logout" class="btn small">Se déconnecter</button>
     </div>
 
     <div class="card">
-      <h3>Bienvenue, syb@yopmail.com</h3>
+      <h3 id="welcome"></h3>
       <p>Votre session est protégée par un cookie HttpOnly.</p>
       <form>
         <input type="text" placeholder="Titre">
@@ -30,5 +30,6 @@
     </div>
   </main>
   <script src="/header.js"></script>
+  <script src="/auth.js"></script>
 </body>
 </html>

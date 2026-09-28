@@ -10,14 +10,16 @@
     <div id="header"></div>
     <div class="card">
       <h2>Inscription</h2>
-      <form>
-        <input type="email" placeholder="Email" required>
-        <input type="password" placeholder="Mot de passe (8 caractères minimum)" minlength="8" required>
+      <form id="register-form">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Mot de passe (8 caractères minimum)" minlength="8" maxlength="72" required>
+        <p class="error" role="alert"></p>
         <button type="submit">Créer le compte</button>
       </form>
-      <p><a href="/api/login">J'ai déjà un compte</a></p>
+      <p><a href="/login">J'ai déjà un compte</a></p>
     </div>
   </main>
   <script src="/header.js"></script>
+  <script src="/auth.js"></script>
 </body>
 </html>

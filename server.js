@@ -27,10 +27,10 @@ app.use(express.static('public'));
 const page = (nom) => (req, res) =>
   res.sendFile(path.join(__dirname, 'public', nom + '.html'));
 
-app.get('/', (req, res) => res.redirect('/api/login'));
-app.get('/api/login', page('login'));
-app.get('/api/register', page('register'));
-app.get('/api/blog', page('blog'));
+app.get('/', (req, res) => res.redirect('/login'));
+app.get('/login', page('login'));
+app.get('/register', page('register'));
+app.get('/blog', page('blog'));
 
 const isValid = (email, password) =>
   typeof email === 'string' && /^\S+@\S+\.\S+$/.test(email) &&
@@ -68,6 +68,13 @@ app.post('/api/login', async (req, res) => {
 
 const requireAuth = (req, res, next) =>
   req.session.userId ? next() : res.status(401).json({ error: 'Not authenticated' });
+
+app.post('/api/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie('connect.sid');
+    res.status(204).end();
+  });
+});
 
 app.get('/api/me', requireAuth, async (req, res) => {
   const [rows] = await db.execute('SELECT id, email, created_at FROM users WHERE id = ?', [req.session.userId]);

@@ -120,3 +120,7 @@ a:not(.btn):hover {
   margin: 0 0 8px;
   font-size: 14px;
 }
+
+.error {
+  color: #dc2626;
+}
