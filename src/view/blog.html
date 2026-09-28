@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>SecureBlog - Articles</title>
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/styles/style.css">
 </head>
 <body>
   <main class="wide">
@@ -15,21 +15,22 @@
     <div class="card">
       <h3 id="welcome"></h3>
       <p>Votre session est protégée par un cookie HttpOnly.</p>
-      <form>
-        <input type="text" placeholder="Titre">
-        <textarea rows="5" placeholder="Contenu"></textarea>
+      <form id="article-form">
+        <input type="text" name="title" placeholder="Titre" maxlength="255" required>
+        <textarea name="content" rows="5" placeholder="Contenu" required></textarea>
+        <p class="error" role="alert"></p>
         <button type="submit">Publier</button>
       </form>
     </div>
 
     <h3>Articles</h3>
-    <div class="card article">
-      <h4>test titre un</h4>
-      <p>test contenu</p>
-      <span class="muted">27/09/2026 23:28:26</span>
-    </div>
+    <div id="default-article"></div>
+    <div id="articles" class="articles"></div>
+
   </main>
   <script src="/header.js"></script>
   <script src="/auth.js"></script>
+  <script src="/default_article.js"></script>
+  <script src="/articles.js"></script>
 </body>
 </html>
