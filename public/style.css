@@ -1,0 +1,122 @@
+:root {
+  --blue: #3157d5;
+  --gray: #6b7280;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f0f4fb;
+  color: #111827;
+  margin: 0;
+  padding: 40px;
+}
+
+main {
+  max-width: 420px;
+  margin: 0 auto;
+}
+main.wide {
+  max-width: 560px;
+}
+
+/* En-tête */
+.header_options {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.brand small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--gray);
+}
+.brand h1 {
+  margin: 4px 0 0;
+  font-size: 30px;
+}
+.brand span {
+  color: var(--blue);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Cartes */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 24px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.card h2,
+.card h3 {
+  margin: 0 0 16px;
+}
+
+/* Formulaires */
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 14px;
+}
+input:focus,
+textarea:focus {
+  outline: 2px solid var(--blue);
+  border-color: transparent;
+}
+
+/* Boutons et liens */
+button,
+.btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: var(--blue);
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+.btn.small {
+  width: auto;
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+a {
+  color: var(--blue);
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: none;
+}
+a:not(.btn):hover {
+  text-decoration: underline;
+}
+
+/* Articles */
+.muted {
+  color: var(--gray);
+  font-size: 12px;
+}
+.article {
+  padding: 16px;
+}
+.article h4 {
+  margin: 0 0 4px;
+}
+.article p {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
