@@ -7,7 +7,7 @@ module.exports = (db) => {
   const articles = articleModel(db);
 
   router.get('/', requireAuth, async (req, res) => {
-    res.json(await articles.findAll());
+    res.json(await articles.findByUser(req.session.userId));
   });
 
   router.post('/', requireAuth, async (req, res) => {
