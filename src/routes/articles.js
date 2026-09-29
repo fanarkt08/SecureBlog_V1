@@ -7,7 +7,7 @@ module.exports = (db) => {
   const articles = articleModel(db);
 
   router.get('/', requireAuth, async (req, res) => {
-    res.json(await articles.findByUser(req.session.userId));
+    res.json(await articles.findByUser(req.userId));
   });
 
   router.post('/', requireAuth, async (req, res) => {
@@ -15,7 +15,7 @@ module.exports = (db) => {
     if (typeof title !== 'string' || !title.trim() || typeof content !== 'string' || !content.trim()) {
       return res.status(400).json({ error: 'Title and content required' });
     }
-    const id = await articles.create(req.session.userId, title.trim(), content.trim());
+    const id = await articles.create(req.userId, title.trim(), content.trim());
     res.status(201).json({ id });
   });
 

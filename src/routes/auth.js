@@ -1,8 +1,16 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
 const requireAuth = require('../middlewares/requireAuth');
 const { isValid } = require('../utils/validators');
+
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: 'lax',
+  secure: process.env.NODE_ENV === 'production',
+  maxAge: 15 * 60 * 1000, // aligné sur l'expiration du JWT
+};
 
 module.exports = (db) => {
   const router = express.Router();
@@ -35,22 +43,22 @@ module.exports = (db) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    req.session.regenerate((err) => {
-      if (err) return res.status(500).json({ error: 'Session error' });
-      req.session.userId = user.id;
-      res.json({ id: user.id, email: user.email });
+    const token = jwt.sign({}, process.env.JWT_SECRET, {
+      algorithm: 'HS256',
+      expiresIn: '15m',
+      subject: String(user.id),
     });
+    res.cookie('token', token, cookieOptions);
+    res.json({ id: user.id, email: user.email });
   });
 
   router.post('/logout', (req, res) => {
-    req.session.destroy(() => {
-      res.clearCookie('connect.sid');
-      res.status(204).end();
-    });
+    res.clearCookie('token', cookieOptions);
+    res.status(204).end();
   });
 
   router.get('/me', requireAuth, async (req, res) => {
-    const user = await users.findById(req.session.userId);
+    const user = await users.findById(req.userId);
     if (!user) return res.status(401).json({ error: 'Not authenticated' });
     res.json(user);
   });
