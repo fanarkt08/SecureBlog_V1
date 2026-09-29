@@ -30,7 +30,6 @@ app.get('/api/health', async (req, res) => {
 });
 
 app.use('/', pagesRoutes);
-app.use('/api', authRoutes(db));
 app.use('/api/auth', authRoutes(db));
 app.use('/api/articles', articlesRoutes(db));
 
