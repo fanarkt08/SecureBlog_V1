@@ -152,7 +152,7 @@ a:not(.btn):hover {
   height: 1px;
   background: #e5e7eb;
 }
-.btn-google {
+.sign_in_options .btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -161,7 +161,13 @@ a:not(.btn):hover {
   color: #1f2937;
   border: 1px solid #d1d5db;
 }
-.btn-google:hover {
+.sign_in_options .btn:hover {
   background: var(--blue);
   color: #fff; 
+}
+
+.sign_in_options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
