@@ -162,5 +162,6 @@ a:not(.btn):hover {
   border: 1px solid #d1d5db;
 }
 .btn-google:hover {
-  background: #f9fafb;
+  background: var(--blue);
+  color: #fff; 
 }
