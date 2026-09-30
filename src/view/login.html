@@ -14,7 +14,17 @@
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Mot de passe (8 caractères minimum)" minlength="8" maxlength="72" required>
         <p class="error" role="alert"></p>
-        <button type="submit">Se connecter</button>
+        <div class="login-buttons">
+          <button type="submit" class="btn-login">
+            Se connecter
+          </button>
+          <a href="/auth/google" class="btn-google">
+            Se connecter via Google
+          </a>
+          <a href="/auth/github" class="btn-github">
+            Se connecter GitHub
+          </a>
+        </div>
       </form>
       <p><a href="/register">Créer un compte</a></p>
     </div>
