@@ -30,6 +30,7 @@ app.get('/api/health', async (req, res) => {
 });
 
 app.use('/', pagesRoutes);
+app.use('/auth', require('./src/routes/googleAuth')(db));
 app.use('/api/auth', authRoutes(db));
 app.use('/api/articles', articlesRoutes(db));
 

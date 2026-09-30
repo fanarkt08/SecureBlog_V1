@@ -34,21 +34,24 @@ const registerForm = document.getElementById('register-form');
 const welcome = document.getElementById('welcome');
 
 if (loginForm) {
-  api('GET', '/api/me').then(({ ok }) => ok && location.replace('/blog'));
-  bindForm(loginForm, '/api/login', () => location.replace('/blog'));
+  if (new URLSearchParams(location.search).get('error') === 'oauth') {
+    loginForm.querySelector('.error').textContent = 'Connexion Google échouée, réessayez.';
+  }
+  api('GET', '/api/auth/me').then(({ ok }) => ok && location.replace('/blog'));
+  bindForm(loginForm, '/api/auth/login', () => location.replace('/blog'));
 }
 
 if (registerForm) {
-  bindForm(registerForm, '/api/register', () => location.replace('/login'));
+  bindForm(registerForm, '/api/auth/register', () => location.replace('/login'));
 }
 
 if (welcome) {
-  api('GET', '/api/me').then(({ ok, data }) => {
+  api('GET', '/api/auth/me').then(({ ok, data }) => {
     if (!ok) return location.replace('/login');
     welcome.textContent = `Bienvenue, ${data.email}`;
   });
   document.getElementById('logout').addEventListener('click', async () => {
-    await api('POST', '/api/logout');
+    await api('POST', '/api/auth/logout');
     location.replace('/login');
   });
 }
