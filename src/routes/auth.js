@@ -1,16 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
 const requireAuth = require('../middlewares/requireAuth');
 const { isValid } = require('../utils/validators');
-
-const cookieOptions = {
-  httpOnly: true,
-  sameSite: 'lax',
-  secure: process.env.NODE_ENV === 'production',
-  maxAge: 15 * 60 * 1000, // aligné sur l'expiration du JWT
-};
+const { cookieOptions, setAuthCookie } = require('../utils/authCookie');
 
 module.exports = (db) => {
   const router = express.Router();
@@ -39,16 +32,12 @@ module.exports = (db) => {
     }
 
     const user = await users.findByEmail(email);
-    if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+    // Un compte créé via Google n'a pas de mot de passe
+    if (!user || !user.password_hash || !(await bcrypt.compare(password, user.password_hash))) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({}, process.env.JWT_SECRET, {
-      algorithm: 'HS256',
-      expiresIn: '15m',
-      subject: String(user.id),
-    });
-    res.cookie('token', token, cookieOptions);
+    setAuthCookie(res, user.id);
     res.json({ id: user.id, email: user.email });
   });
 

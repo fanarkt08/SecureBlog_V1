@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const pagesRoutes = require('./src/routes/pages');
 const authRoutes = require('./src/routes/auth');
 const articlesRoutes = require('./src/routes/articles');
+const googleRoutes = require('./src/routes/google');
 
 const app = express();
 
@@ -18,7 +19,11 @@ const db = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: { 'img-src': ["'self'", 'data:', 'https://lh3.googleusercontent.com'] },
+  },
+}));
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -30,6 +35,7 @@ app.get('/api/health', async (req, res) => {
 });
 
 app.use('/', pagesRoutes);
+app.use('/', googleRoutes(db));
 app.use('/api/auth', authRoutes(db));
 app.use('/api/articles', articlesRoutes(db));
 

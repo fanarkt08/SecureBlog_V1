@@ -4,6 +4,12 @@ const messages = {
   409: 'Cet email est déjà utilisé.',
 };
 
+const googleErrors = {
+  google: 'Connexion avec Google impossible, réessayez.',
+  google_cancelled: 'Connexion avec Google annulée.',
+  google_email_taken: 'Un compte existe déjà avec cet email : connectez-vous avec votre mot de passe.',
+};
+
 async function api(method, url, body) {
   const res = await fetch(url, {
     method,
@@ -34,21 +40,19 @@ const registerForm = document.getElementById('register-form');
 const welcome = document.getElementById('welcome');
 
 if (loginForm) {
-  api('GET', '/api/me').then(({ ok }) => ok && location.replace('/blog'));
-  bindForm(loginForm, '/api/login', () => location.replace('/blog'));
+  const googleError = googleErrors[new URLSearchParams(location.search).get('error')];
+  if (googleError) loginForm.querySelector('.error').textContent = googleError;
+  api('GET', '/api/auth/me').then(({ ok }) => ok && location.replace('/blog'));
+  bindForm(loginForm, '/api/auth/login', () => location.replace('/blog'));
 }
 
 if (registerForm) {
-  bindForm(registerForm, '/api/register', () => location.replace('/login'));
+  bindForm(registerForm, '/api/auth/register', () => location.replace('/login'));
 }
 
 if (welcome) {
-  api('GET', '/api/me').then(({ ok, data }) => {
+  api('GET', '/api/auth/me').then(({ ok, data }) => {
     if (!ok) return location.replace('/login');
-    welcome.textContent = `Bienvenue, ${data.email}`;
-  });
-  document.getElementById('logout').addEventListener('click', async () => {
-    await api('POST', '/api/logout');
-    location.replace('/login');
+    welcome.textContent = `Bienvenue, ${data.name || data.email}`;
   });
 }
