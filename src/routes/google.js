@@ -4,7 +4,6 @@ const { OAuth2Client } = require('google-auth-library');
 const userModel = require('../models/userModel');
 const { cookieOptions, setAuthCookie } = require('../utils/authCookie');
 
-// Lax (pas Strict) : le retour depuis Google est une navigation cross-site
 const stateOptions = {
   httpOnly: true,
   sameSite: 'lax',
@@ -51,7 +50,6 @@ module.exports = (db) => {
       const { sub, email, email_verified, name, picture } = ticket.getPayload();
       if (!email_verified) return res.redirect('/login?error=google');
 
-      // Liaison par sub, jamais par email : un compte local du même email n'est pas repris
       const user = await users.findByGoogleSub(sub);
       let userId = user?.id;
       if (userId) await users.updateGoogleProfile(userId, name, picture);

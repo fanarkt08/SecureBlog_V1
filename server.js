@@ -21,7 +21,7 @@ const db = mysql.createPool({
 
 app.use(helmet({
   contentSecurityPolicy: {
-    directives: { 'img-src': ["'self'", 'data:', 'https://lh3.googleusercontent.com'] },
+    directives: { 'img-src': ["'self'", 'data:', 'https://lh3.googleusercontent.com', 'https://cdn.jsdelivr.net'] },
   },
 }));
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
