@@ -19,18 +19,13 @@ module.exports = () => {
       failureRedirect: '/login?error=github',
     }),
     (req, res) => {
-      console.log('PASSPORT GITHUB SUCCESS:', req.user);
+      //console.log('PASSPORT GITHUB SUCCESS:', req.user);
 
       setAuthCookie(res, req.user.id);
 
       res.redirect('/');
     }
   );
-
-  router.get('/logout', (req, res) => {
-    res.clearCookie('token', cookieOptions);
-    res.redirect('/');
-  });
 
   return router;
 };

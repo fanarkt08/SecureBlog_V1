@@ -64,10 +64,5 @@ module.exports = (db) => {
     }
   });
 
-  router.get('/logout', (req, res) => {
-    res.clearCookie('token', cookieOptions);
-    res.redirect('/');
-  });
-
   return router;
 };
