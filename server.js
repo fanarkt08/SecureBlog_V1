@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const mysql = require('mysql2/promise');
 const path = require('path');
 const helmet = require('helmet');
@@ -20,6 +21,8 @@ const db = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
+require('./src/config/passport')(db);
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: { 'img-src': ["'self'", 'data:', 'https://lh3.googleusercontent.com', 'https://cdn.jsdelivr.net', 'https://avatars.githubusercontent.com'] },
@@ -29,6 +32,7 @@ app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'src/view'), { index: false }));
+app.use(passport.initialize());
 
 app.get('/api/health', async (req, res) => {
   await db.query('SELECT 1');
