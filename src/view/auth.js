@@ -4,10 +4,13 @@ const messages = {
   409: 'Cet email est déjà utilisé.',
 };
 
-const googleErrors = {
+const oauthErrors = {
   google: 'Connexion avec Google impossible, réessayez.',
   google_cancelled: 'Connexion avec Google annulée.',
   google_email_taken: 'Un compte existe déjà avec cet email : connectez-vous avec votre mot de passe.',
+  github: 'Connexion avec GitHub impossible, réessayez.',
+  github_cancelled: 'Connexion avec GitHub annulée.',
+  github_email_taken: 'Un compte existe déjà avec cet email : connectez-vous avec votre mot de passe.',
 };
 
 async function api(method, url, body) {
@@ -40,8 +43,8 @@ const registerForm = document.getElementById('register-form');
 const welcome = document.getElementById('welcome');
 
 if (loginForm) {
-  const googleError = googleErrors[new URLSearchParams(location.search).get('error')];
-  if (googleError) loginForm.querySelector('.error').textContent = googleError;
+  const oauthError = oauthErrors[new URLSearchParams(location.search).get('error')];
+  if (oauthError) loginForm.querySelector('.error').textContent = oauthError;
   api('GET', '/api/auth/me').then(({ ok }) => ok && location.replace('/blog'));
   bindForm(loginForm, '/api/auth/login', () => location.replace('/blog'));
 }

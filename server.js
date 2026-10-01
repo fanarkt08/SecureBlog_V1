@@ -9,6 +9,7 @@ const pagesRoutes = require('./src/routes/pages');
 const authRoutes = require('./src/routes/auth');
 const articlesRoutes = require('./src/routes/articles');
 const googleRoutes = require('./src/routes/google');
+const githubRoutes = require('./src/routes/github');
 
 const app = express();
 
@@ -21,7 +22,7 @@ const db = mysql.createPool({
 
 app.use(helmet({
   contentSecurityPolicy: {
-    directives: { 'img-src': ["'self'", 'data:', 'https://lh3.googleusercontent.com', 'https://cdn.jsdelivr.net'] },
+    directives: { 'img-src': ["'self'", 'data:', 'https://lh3.googleusercontent.com', 'https://cdn.jsdelivr.net', 'https://avatars.githubusercontent.com'] },
   },
 }));
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -36,6 +37,7 @@ app.get('/api/health', async (req, res) => {
 
 app.use('/', pagesRoutes);
 app.use('/', googleRoutes(db));
+app.use('/', githubRoutes(db));
 app.use('/api/auth', authRoutes(db));
 app.use('/api/articles', articlesRoutes(db));
 

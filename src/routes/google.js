@@ -4,13 +4,7 @@ const { OAuth2Client } = require('google-auth-library');
 const userModel = require('../models/userModel');
 const { cookieOptions, setAuthCookie } = require('../utils/authCookie');
 
-const stateOptions = {
-  httpOnly: true,
-  sameSite: 'lax',
-  secure: process.env.NODE_ENV === 'production',
-  maxAge: 10 * 60 * 1000,
-  path: '/auth/google',
-};
+const stateOptions = { ...cookieOptions, maxAge: 10 * 60 * 1000, path: '/auth/google' };
 
 module.exports = (db) => {
   const router = express.Router();
@@ -37,7 +31,7 @@ module.exports = (db) => {
     res.clearCookie('oauth_state', stateOptions);
 
     if (error) return res.redirect('/login?error=google_cancelled');
-    if (typeof code !== 'string' || typeof state !== 'string' || !expectedState || state !== expectedState) {
+    if (!expectedState || state !== expectedState) {
       return res.redirect('/login?error=google');
     }
 
@@ -50,10 +44,7 @@ module.exports = (db) => {
       const { sub, email, email_verified, name, picture } = ticket.getPayload();
       if (!email_verified) return res.redirect('/login?error=google');
 
-      const user = await users.findByGoogleSub(sub);
-      let userId = user?.id;
-      if (userId) await users.updateGoogleProfile(userId, name, picture);
-      else userId = await users.createGoogle(sub, email, name, picture);
+      const userId = await users.loginFromProvider('google', sub, email, name, picture);
 
       setAuthCookie(res, userId);
       res.redirect('/');
@@ -62,11 +53,6 @@ module.exports = (db) => {
       console.error('Google OAuth callback failed:', err.message);
       res.redirect('/login?error=google');
     }
-  });
-
-  router.get('/logout', (req, res) => {
-    res.clearCookie('token', cookieOptions);
-    res.redirect('/');
   });
 
   return router;

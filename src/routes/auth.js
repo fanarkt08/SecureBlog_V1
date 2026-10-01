@@ -32,7 +32,6 @@ module.exports = (db) => {
     }
 
     const user = await users.findByEmail(email);
-    // Un compte créé via Google n'a pas de mot de passe
     if (!user || !user.password_hash || !(await bcrypt.compare(password, user.password_hash))) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }

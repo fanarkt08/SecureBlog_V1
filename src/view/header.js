@@ -1,17 +1,9 @@
-function navLink(href, text) {
-  const a = document.createElement('a');
-  a.href = href;
-  a.className = 'btn small';
-  a.textContent = text;
-  return a;
-}
-
 async function renderUserNav(nav) {
-  const res = await fetch('/api/auth/me', { credentials: 'same-origin' });
+  const res = await fetch('/api/auth/me');
   if (!res.ok) return;
 
   const user = await res.json();
-  if (typeof user.picture === 'string' && user.picture.startsWith('https://')) {
+  if (user.picture?.startsWith('https://')) {
     const img = document.createElement('img');
     img.src = user.picture;
     img.alt = '';
@@ -21,7 +13,15 @@ async function renderUserNav(nav) {
   }
   const name = document.createElement('span');
   name.textContent = user.name || user.email;
-  nav.append(name, navLink('/logout', 'Se déconnecter'));
+  const logout = document.createElement('button');
+  logout.type = 'button';
+  logout.className = 'btn small';
+  logout.textContent = 'Se déconnecter';
+  logout.addEventListener('click', async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    location.replace('/login');
+  });
+  nav.append(name, logout);
 }
 
 fetch('/partials/header.html')

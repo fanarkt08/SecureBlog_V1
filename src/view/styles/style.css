@@ -152,7 +152,7 @@ a:not(.btn):hover {
   height: 1px;
   background: #e5e7eb;
 }
-.btn-google {
+.btn-oauth {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -161,7 +161,10 @@ a:not(.btn):hover {
   color: #1f2937;
   border: 1px solid #d1d5db;
 }
-.btn-google:hover {
+.btn-oauth + .btn-oauth {
+  margin-top: 10px;
+}
+.btn-oauth:hover {
   background: var(--blue);
   color: #fff; 
 }
